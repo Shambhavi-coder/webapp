@@ -35,14 +35,14 @@ pipeline {
     steps {
         script {
             if (env.BRANCH_NAME == "develop") {
-                bat 'set PORT=9999 && start /B java -jar target/java-webapp-1.0-shaded.jar'
+                bat 'start /B java -DappPort=9999 -jar target/java-webapp-1.0-shaded.jar'
             }
             else if (env.BRANCH_NAME == "feature") {
-                bat 'set PORT=9997 && start /B java -jar target/java-webapp-1.0-shaded.jar'
-            }
-                }
+                bat 'start /B java -DappPort=9997 -jar target/java-webapp-1.0-shaded.jar'
             }
         }
+    }
+}
 
     }
 }
