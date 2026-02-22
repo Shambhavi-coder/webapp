@@ -40,10 +40,9 @@ pipeline {
             else if (env.BRANCH_NAME == "feature") {
                 bat 'set PORT=9997 && start /B java -jar target/java-webapp-1.0-shaded.jar'
             }
+                }
+            }
         }
-    }
-}
-    }
-}
+
     }
 }
