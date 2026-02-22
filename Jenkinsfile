@@ -31,16 +31,18 @@ pipeline {
           //      bat 'mvn clean install sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.analysis.mode=publish'
             //}
         //}
-     stage('Deploy') {
+    stage('Deploy') {
     steps {
         script {
             if (env.BRANCH_NAME == "develop") {
-                bat 'start /B java -jar target/java-webapp-1.0-shaded.jar --port 9999'
+                bat 'set PORT=9999 && start /B java -jar target/java-webapp-1.0-shaded.jar'
             }
             else if (env.BRANCH_NAME == "feature") {
-                bat 'start /B java -jar target/java-webapp-1.0-shaded.jar --port 9997'
+                bat 'set PORT=9997 && start /B java -jar target/java-webapp-1.0-shaded.jar'
             }
         }
+    }
+}
     }
 }
     }
