@@ -11,12 +11,10 @@ import java.util.Map;
 import static spark.Spark.get;
 import static spark.Spark.before;
 
-public class App
-{
+public class App {
 
-  public String enMsg()
-  {
-    return "Hello World!";
+  public String enMsg() {
+    return "Hello from Feature Branch 🚀!";
   }
 
   private static String requestInfoToString(Request request) {
@@ -38,11 +36,11 @@ public class App
     Spark.threadPool(10, 5, 600);
 
     before((request, response) -> {
-        System.out.println(requestInfoToString(request));
+      System.out.println(requestInfoToString(request));
     });
 
-    get("/", (request,response) -> "Hello!!! My version is 1.0 and I am built from Develop branch on port 9999!");
-    
+    get("/", (request, response) -> "Hello!!! My version is 1.0 and I am built from Develop branch on port 9999!");
+
   }
 
 }
