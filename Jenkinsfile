@@ -39,9 +39,16 @@ pipeline {
 
                 dir target
 
+                REM kill old process
                 for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9999') do taskkill /PID %%a /F
 
-                start /B java -DappPort=9999 -jar %WORKSPACE%\\target\\java-webapp-1.0-shaded.jar
+                REM find jar dynamically
+                for %%f in (target\\*.jar) do set JAR=%%f
+
+                echo Running %JAR%
+
+                REM run jar
+                start /B java -DappPort=9999 -jar %JAR%
 
                 echo ===== DEPLOYMENT DONE =====
                 '''
