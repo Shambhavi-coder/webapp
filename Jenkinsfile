@@ -5,6 +5,12 @@ pipeline {
 
     stages {
 
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/Shambhavi-coder/webapp'
+            }
+        }
+
         stage('Build') {
             steps {
                 bat 'mvn -B -DskipTests clean package'
@@ -32,34 +38,17 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
-                    def branch = env.BRANCH_NAME ?: ""
-                    echo "Branch: ${branch}"
+                bat '''
+                echo ===== DEPLOYING APPLICATION =====
 
-                    if (branch.contains("develop")) {
-                        bat '''
-                        echo Deploying on port 9999...
+                REM kill process on port 9999 if running
+                for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9999') do taskkill /PID %%a /F
 
-                        REM kill existing process on port 9999
-                        for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9999') do taskkill /PID %%a /F
+                REM start application
+                start /B java -DappPort=9999 -jar target\\java-webapp-1.0-shaded.jar
 
-                        REM start application
-                        start /B java -DappPort=9999 -jar target\\java-webapp-1.0-shaded.jar
-                        '''
-                    } else if (branch.contains("feature")) {
-                        bat '''
-                        echo Deploying on port 9997...
-
-                        REM kill existing process on port 9997
-                        for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9997') do taskkill /PID %%a /F
-
-                        REM start application
-                        start /B java -DappPort=9997 -jar target\\java-webapp-1.0-shaded.jar
-                        '''
-                    } else {
-                        echo "No deployment configured for this branch"
-                    }
-                }
+                echo ===== DEPLOYMENT DONE =====
+                '''
             }
         }
     }
