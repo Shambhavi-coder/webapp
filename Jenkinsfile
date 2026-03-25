@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+    agent any
 
     stages {
 
@@ -35,15 +35,17 @@ pipeline {
 
                 cd %WORKSPACE%
 
+                echo Listing target folder:
                 dir target
 
-                REM kill old process
+                echo Killing any process running on port 9999...
                 for /f "tokens=5" %%a in ('netstat -aon ^| findstr :9999') do taskkill /PID %%a /F
 
-                REM run correct jar (IMPORTANT FIX)
-                start /B java -DappPort=9999 -jar target\\java-webapp-1.0.jar
+                echo Starting application...
 
-                echo ===== DEPLOYMENT DONE =====
+                java -DappPort=9999 -jar target\\java-webapp-1.0.jar
+
+                echo ===== DEPLOYMENT COMPLETE =====
                 '''
             }
         }
