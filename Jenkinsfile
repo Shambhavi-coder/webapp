@@ -3,6 +3,8 @@ pipeline {
         label 'Slave01'
     }
 
+
+    
     stages {
 
         stage('Build') {
