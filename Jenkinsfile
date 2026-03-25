@@ -33,7 +33,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == "develop") {
+                    def branch = env.BRANCH_NAME ?: ""
+                    echo "Branch: ${branch}"
+
+                    if (branch.contains("develop")) {
                         bat '''
                         echo Deploying on port 9999...
 
@@ -43,7 +46,7 @@ pipeline {
                         REM start application
                         start /B java -DappPort=9999 -jar target\\java-webapp-1.0-shaded.jar
                         '''
-                    } else if (env.BRANCH_NAME == "feature") {
+                    } else if (branch.contains("feature")) {
                         bat '''
                         echo Deploying on port 9997...
 
@@ -53,6 +56,8 @@ pipeline {
                         REM start application
                         start /B java -DappPort=9997 -jar target\\java-webapp-1.0-shaded.jar
                         '''
+                    } else {
+                        echo "No deployment configured for this branch"
                     }
                 }
             }
